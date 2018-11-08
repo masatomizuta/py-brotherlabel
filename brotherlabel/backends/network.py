@@ -19,8 +19,6 @@ class NetworkBackend(Backend):
         """
         device_specifier: string: identifier in the format tcp://192.168.1.10
         """
-        super().__init__()
-
         self.read_timeout_sec = 1
         self.write_timeout_sec = 10
 

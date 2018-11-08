@@ -9,14 +9,6 @@ class Backend(object, metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def __init__(self):
-        """
-        device_specifier can be either a string or an instance
-        of the required class type.
-        """
-        pass
-
-    @abstractmethod
     def write(self, data: bytes):
         raise NotImplementedError()
 

@@ -60,8 +60,6 @@ class USBBackend(Backend):
         """
         device_specifier: string: identifier in the format usb://idVendor:idProduct/iSerialNumber
         """
-        super().__init__()
-
         self.dev = None  # type: usb.core.Device
         self.read_timeout_sec = 1
         self.write_timeout_sec = 15
