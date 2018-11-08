@@ -5,7 +5,7 @@ from PIL import Image
 
 backend = brotherlabel.USBBackend("usb://0x04f9:0x2086")
 printer = brotherlabel.PTPrinter(backend)
-printer.high_resolution = True
+printer.quality = brotherlabel.Quality.high_resolution
 printer.tape = brotherlabel.Tape.TZe12mm
 printer.margin = 0
 

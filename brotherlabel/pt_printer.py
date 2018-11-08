@@ -31,15 +31,27 @@ class Tape(Enum):
         return self.value['right_margin']
 
 
+class Quality(Enum):
+    """ Print Quality """
+    standard = 0
+    """ Standard 360 x 360 dpi """
+    draft = 1
+    """ Draft 360 x 180 dpi """
+    high_quality = 2
+    """ High Quality Slow Speed 360 x 360 dpi """
+    high_resolution = 3
+    """ High Resolution 360 x 720 dpi """
+
+
 class PTPrinter(object):
     __total_pins = 560
 
     def __init__(self, backend: Backend):
         self.backend = backend
         self.print_timeout_sec = 10
-        self.high_resolution = False
         self.margin = 0
         self.tape = Tape.TZe12mm
+        self.quality = Quality.standard
 
     def get_status(self) -> Status:
         data = Commands.invalidate()
@@ -103,7 +115,10 @@ class PTPrinter(object):
         data += Commands.switch_dynamic_command_mode(CommandMode.Raster)
         data += Commands.various_mode_settings(auto_cut=False)
         data += Commands.specify_page_number(1)
-        data += Commands.advanced_mode_settings(half_cut=True, high_resolution=self.high_resolution)
+        data += Commands.advanced_mode_settings(
+            half_cut=True,
+            high_resolution=self.quality == Quality.high_resolution,
+            draft=self.quality == Quality.draft)
         data += Commands.specify_margin_amount(self.margin)
 
         for i, img in enumerate(images):
@@ -117,7 +132,11 @@ class PTPrinter(object):
             else:
                 page = 1
 
-            data += Commands.print_information_command(raster_number=img.width, page=page)
+            data += Commands.print_information_command(
+                raster_number=img.width,
+                page=page,
+                flag_quality=self.quality in [Quality.high_quality, Quality.high_resolution])
+
             data += Commands.select_compression_mode(tiff=False)
 
             img_bytes = self.__get_image_bytes(img)
