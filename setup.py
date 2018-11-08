@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='py-brotherlabel',
-    version='1.0.0',
+    version='0.1.0',
     description='Raster print package for Brother label printers',
     author='Masato Mizuta',
     author_email='mst.mizuta@gmail.com',
