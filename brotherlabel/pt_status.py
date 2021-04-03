@@ -102,7 +102,7 @@ class Status(ctypes.Structure):
                 ('battery_level', ctypes.c_ubyte),
                 ('extended_error', ctypes.c_ubyte),
                 ('error_info_1', ctypes.c_ubyte),
-                ('error_info_2 ', ctypes.c_ubyte),
+                ('error_info_2', ctypes.c_ubyte),
                 ('media_width', ctypes.c_ubyte),
                 ('media_type', ctypes.c_ubyte),
                 ('number_of_colors', ctypes.c_ubyte),
