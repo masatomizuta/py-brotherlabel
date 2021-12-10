@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import division
 import time
 from enum import Enum
 from logging import getLogger
@@ -23,11 +23,13 @@ class Tape(Enum):
     TZe36mm = {'print_area': 454, 'right_margin': 61}
 
     @property
-    def print_area(self) -> int:
+    def print_area(self):
+        # type: () -> int
         return self.value['print_area']
 
     @property
-    def right_margin(self) -> int:
+    def right_margin(self):
+        # type: () -> int
         return self.value['right_margin']
 
 
@@ -46,14 +48,16 @@ class Quality(Enum):
 class PTPrinter(object):
     __total_pins = 560
 
-    def __init__(self, backend: Backend):
+    def __init__(self, backend):
+        # type: (Backend) -> None
         self.backend = backend
         self.print_timeout_sec = 10
         self.margin = 0
         self.tape = Tape.TZe12mm
         self.quality = Quality.standard
 
-    def get_status(self) -> Status:
+    def get_status(self):
+        # type: () -> Status
         data = Commands.invalidate()
         data += Commands.initialize()
         data += Commands.status_information_request()
@@ -76,10 +80,11 @@ class PTPrinter(object):
         return status
 
     @staticmethod
-    def __get_raster_line(img, img_bytes, line_len: int, x: int, y_offset: int) -> bytes:
+    def __get_raster_line(img, img_bytes, line_len, x, y_offset):
+        # type: (str, bytearray, int, int, int) -> bytearray
         """
         Scan a line from the image
-        :return: bytes of a raster line
+        :return: bytearray of a raster line
         """
         line = b''
         for line_idx in range(line_len):
@@ -109,7 +114,8 @@ class PTPrinter(object):
 
         return img.load()
 
-    def print(self, images: [Image]) -> Status:
+    def pt_print(self, images):
+        # type: (Image) -> Status
         data = Commands.invalidate()
         data += Commands.initialize()
         data += Commands.switch_dynamic_command_mode(CommandMode.Raster)
@@ -146,13 +152,14 @@ class PTPrinter(object):
             for x in range(img.width):
                 line = self.__get_raster_line(img, img_bytes, line_len, x, offset)
                 data += Commands.raster_graphics_transfer(line)
-
+        
         data += Commands.print_command_with_feeding()
 
         _logger.info('Sending data to the printer. Total: %d bytes.', len(data))
         self.backend.write(data)
 
         status = None
+
         start = time.time()
         while time.time() - start < self.print_timeout_sec:
             rsp = self.backend.read()

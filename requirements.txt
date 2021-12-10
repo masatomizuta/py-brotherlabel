@@ -1,2 +1,5 @@
-Pillow
-pyusb
+enum34==1.1.10
+future==0.18.2
+pathlib==1.0.1
+Pillow==6.2.2
+pyusb==1.1.1

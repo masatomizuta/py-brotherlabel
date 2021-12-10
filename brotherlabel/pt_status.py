@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import division
 import ctypes
 from enum import IntEnum
 
@@ -126,20 +126,22 @@ class Status(ctypes.Structure):
                 ('reserved5', ctypes.c_ubyte),
                 ('reserved6', ctypes.c_ubyte)]
 
-    def to_string(self) -> str:
+    def to_string(self):
+        # type: () -> str
         s = ""
         for field in self._fields_:
             s += '{}: 0x{:02x}\n'.format(field[0], getattr(self, field[0]))
         return s
 
     @classmethod
-    def from_bytes(cls, data: bytes):
+    def from_bytes(cls, data):
+        # type: (bytearray) -> Self@Status
         r = cls()
         ctypes.memmove(ctypes.addressof(r), data, 32)
         return r
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(Status, self).__init__(*args, **kwargs)
 
         self.print_head_mark = 0
         self.size = 0
