@@ -10,9 +10,10 @@ class TestPTPrinter(unittest.TestCase):
 
     def test_get_status(self):
         mock_backend = unittest.mock.create_autospec(spec=Backend)
-        mock_backend.read.return_value = bytes(32)
+        mock_backend.read.return_value = bytearray(32)
 
-        def write_handler(data: bytes):
+        def write_handler(data):
+            # type: (bytearray) -> None
             self.assertTrue(data.startswith(Commands.invalidate()))
             self.assertTrue(data.endswith(Commands.status_information_request()))
 
@@ -27,9 +28,9 @@ class TestPTPrinter(unittest.TestCase):
 
     def test_print_single_image(self):
         mock_backend = unittest.mock.create_autospec(spec=Backend)
-        mock_backend.read.return_value = bytes(32)
+        mock_backend.read.return_value = bytearray(32)
 
-        def write_handler(data: bytes):
+        def write_handler(data: bytearray):
             self.assertTrue(data.startswith(Commands.invalidate()))
             self.assertTrue(data.endswith(Commands.print_command_with_feeding()))
 
@@ -39,7 +40,7 @@ class TestPTPrinter(unittest.TestCase):
 
         img = Image.open('../label_12mm.png')
 
-        status = printer.print([img])
+        status = printer.pt_print([img])
 
         mock_backend.write.assert_called_once()
 
