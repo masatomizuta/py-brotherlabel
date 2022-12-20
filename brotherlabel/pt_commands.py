@@ -110,3 +110,32 @@ class Commands(object):
     @staticmethod
     def print_command_with_feeding() -> bytes:
         return b'\x1A'
+
+    @staticmethod
+    def choose_template(template=1) -> bytes:
+        assert template < 100
+        id = str(int(0))
+        id += str(int(int(template)/10))
+        id += str(int(int(template)%10))
+        return b'\x5E\x54\x53' + bytes(id, 'UTF-8')
+
+    @staticmethod
+    def select_object(name) -> bytes:
+        return b'\x5E\x4F\x4E' + bytes(name, 'UTF-8') + b'\x00'
+
+    @staticmethod
+    def directly_insert_object(text_string) -> bytes:
+        data = bytes(text_string, 'UTF-8')
+        return b'\x5E\x44\x49' + struct.pack('<H', len(data)) + data
+
+    @staticmethod
+    def template_print() -> bytes:
+        return b'\x5E\x46\x46'
+
+    @staticmethod
+    def initialize_dynamic_settings() -> bytes:
+        return b'\x5E\x49\x49'
+    
+    @staticmethod
+    def initialize_template_data() -> bytes:
+        return b'\x5E\x49\x44'
