@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(
-    name='py-brotherlabel',
+    name='py-brotherlabel-casambi',
     version='0.1.0',
     description='Raster print package for Brother label printers',
     author='Masato Mizuta',
