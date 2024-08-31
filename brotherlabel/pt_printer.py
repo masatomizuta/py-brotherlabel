@@ -167,3 +167,18 @@ class PTPrinter(object):
             raise TimeoutError("Status did not received")
 
         return status
+
+class PTTemplatePrinter(object):
+    def __init__(self, backend: Backend):
+        self.backend = backend
+
+    def print(self, id, custom_fields):
+        data = Commands.initialize_dynamic_settings()
+        data += Commands.initialize_template_data()
+        data += Commands.choose_template(id)
+        assert type(custom_fields) is dict
+        for key in custom_fields.keys():
+            data += Commands.select_object(key)
+            data += Commands.directly_insert_object(custom_fields[key])
+        data += Commands.template_print()
+        self.backend.write(data)
