@@ -43,5 +43,5 @@ sudo udevadm control --reload; sudo udevadm trigger
 ## Reference
 
 - Software Developer's Manual Raster Command Reference PT-P900/P900W/P950NW
-  - [English](https://download.brother.com/welcome/docp100407/cv_ptp900_eng_raster_101.pdf)
-  - [Japanese](https://download.brother.com/welcome/docp100407/cv_ptp900_jpn_raster_101.pdf)
+  - [English](https://download.brother.com/welcome/docp100407/cv_ptp900_eng_raster_102.pdf)
+  - [Japanese](https://download.brother.com/welcome/docp100407/cv_ptp900_jpn_raster_102.pdf)
