@@ -52,6 +52,10 @@ class PTPrinter(object):
         self.margin = 0
         self.tape = Tape.TZe12mm
         self.quality = Quality.standard
+        self.auto_cut = False
+        self.half_cut = True
+        self.no_chain = False
+        self.special_tape = False
 
     def get_status(self) -> Status:
         data = Commands.invalidate()
@@ -113,12 +117,14 @@ class PTPrinter(object):
         data = Commands.invalidate()
         data += Commands.initialize()
         data += Commands.switch_dynamic_command_mode(CommandMode.Raster)
-        data += Commands.various_mode_settings(auto_cut=False)
+        data += Commands.various_mode_settings(auto_cut=self.auto_cut)
         data += Commands.specify_page_number(1)
         data += Commands.advanced_mode_settings(
-            half_cut=True,
+            half_cut=self.half_cut,
             high_resolution=self.quality == Quality.high_resolution,
-            draft=self.quality == Quality.draft)
+            draft=self.quality == Quality.draft,
+            no_chain=self.no_chain,
+            special_tape=self.special_tape)
         data += Commands.specify_margin_amount(self.margin)
 
         for i, img in enumerate(images):
